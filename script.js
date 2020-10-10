@@ -10,7 +10,7 @@ function searchWeather(name) {
         method: "GET"
     }).then(function(response) {
         console.log(response);
-        $("#city-name").empty();
+        $("#city-input").empty();
         $("#uv-index-results").empty();
         $(".forecast").empty();
 
@@ -64,35 +64,102 @@ function searchWeather(name) {
     var queryURLForecast = "https://api.openweathermap.org/data/2.5/forecast?q="+userInput+"&appid=" + APIKey;
 
     $.ajax({
-        url: queryURLforcast,
-        method: 'GET'
-    }).then(function (response) {
-        // Storing an array of results in the results variable
-        var results = response.list;
-        //empty 5day div--------
-        $("#5day").empty();
-        //create HTML for 5day forcast................
-        for (var i = 0; i < results.length; i += 8) {
-            // Creating a div
-            var fiveDayDiv = $("<div class='card shadow-lg text-white bg-primary mx-auto mb-10 p-2' style='width: 8.5rem; height: 11rem;'>");
-            
-            //Storing the responses date temp and humidity.......
-            var date = results[i].dt_txt;
-            var setD = date.substr(0,10)
-            var temp = results[i].main.temp;
-            var hum = results[i].main.humidity;
-   
-            //creating tags with the result items information.....
-            var h5date = $("<h5 class='card-title'>").text(setD);
-            var pTemp = $("<p class='card-text'>").text("Temp: " + temp);;
-            var pHum = $("<p class='card-text'>").text("Humidity " + hum);;
-            //append items to.......
-            fiveDayDiv.append(h5date);
-            fiveDayDiv.append(icon);
-            fiveDayDiv.append(pTemp);
-            fiveDayDiv.append(pHum);
-            $("#5day").append(fiveDayDiv);
-        }
+        url: queryURLForecast,
+        method: "GET"
+    }).then(function(response) {
+        console.log(response);
+
+        // FIRST VARIABLES AND DATA APPENDING FOR 1/5 DAY FORECAST
+        var rawDate = JSON.stringify(response.list[1].dt_txt);
+        var splitForecastDate = rawDate.split(" ");
+        var forecastDate = moment(splitForecastDate[0]).format("MM/DD/YYYY");
+
+        var forecastWeatherIcon = response.list[1].weather[0].icon;
+        console.log(forecastWeatherIcon);
+        var forecastIconURL = "http://openweathermap.org/img/w/" + forecastWeatherIcon + ".png";
+        console.log(forecastIconURL);
+        forecastIconEl = $("<img>").attr("src", forecastIconURL);
+
+        var forecastTempK = response.list[1].main.temp;
+        var forecastTempC = (forecastTempK - 273.15)*1.80+32;
+        var forecastHum = response.list[1].main.humidity;
+
+        $("#forecast-day-1").append(forecastDate);
+        $("#forecast-day-1").append(forecastIconEl);
+        $("#forecast-day-1").append("<p>" + "Temp: " + forecastTempC.toFixed(2) + " °F");
+        $("#forecast-day-1").append("<p>" + "Humidity: " + forecastHum + "%");
+
+        // VARIABLES AND APPENDS FOR 2/5 DAY FORECAST
+        var rawDate = JSON.stringify(response.list[2].dt_txt);
+        var splitForecastDate = rawDate.split(" ");
+        var forecastDate = moment(splitForecastDate[0]).format("MM/DD/YYYY");
+
+        var forecastWeatherIcon = response.list[2].weather[0].icon;
+        var forecastIconURL = "http://openweathermap.org/img/w/" + forecastWeatherIcon + ".png";
+        forecastIconEl = $("<img>").attr("src", forecastIconURL);
+
+        var forecastTempK = response.list[2].main.temp;
+        var forecastTempC = (forecastTempK - 273.15)*1.80+32;
+        var forecastHum = response.list[2].main.humidity;
+
+        $("#forecast-day-2").append(forecastDate);
+        $("#forecast-day-2").append(forecastIconEl);
+        $("#forecast-day-2").append("<p>" + "Temp: " + forecastTempC.toFixed(2) + " °F");
+        $("#forecast-day-2").append("<p>" + "Humidity: " + forecastHum + "%");
+
+        // VARIABLES AND APPENDS FOR 3/5 DAY FORECAST
+        var rawDate = JSON.stringify(response.list[3].dt_txt);
+        var splitForecastDate = rawDate.split(" ");
+        var forecastDate = moment(splitForecastDate[0]).format("MM/DD/YYYY");
+
+        var forecastWeatherIcon = response.list[3].weather[0].icon;
+        var forecastIconURL = "http://openweathermap.org/img/w/" + forecastWeatherIcon + ".png";
+        forecastIconEl = $("<img>").attr("src", forecastIconURL);
+
+        var forecastTempK = response.list[3].main.temp;
+        var forecastTempC = (forecastTempK - 273.15)*1.80+32;
+        var forecastHum = response.list[3].main.humidity;
+
+        $("#forecast-day-3").append(forecastDate);
+        $("#forecast-day-3").append(forecastIconEl);
+        $("#forecast-day-3").append("<p>" + "Temp: " + forecastTempC.toFixed(2) + " °F");
+        $("#forecast-day-3").append("<p>" + "Humidity: " + forecastHum + "%");
+
+        // VARIABLES AND APPENDS FOR 4/5 DAY FORECAST
+        var rawDate = JSON.stringify(response.list[4].dt_txt);
+        var splitForecastDate = rawDate.split(" ");
+        var forecastDate = moment(splitForecastDate[0]).format("MM/DD/YYYY");
+
+        var forecastWeatherIcon = response.list[4].weather[0].icon;
+        var forecastIconURL = "http://openweathermap.org/img/w/" + forecastWeatherIcon + ".png";
+        forecastIconEl = $("<img>").attr("src", forecastIconURL);
+
+        var forecastTempK = response.list[4].main.temp;
+        var forecastTempC = (forecastTempK - 273.15)*1.80+32;
+        var forecastHum = response.list[4].main.humidity;
+
+        $("#forecast-day-4").append(forecastDate);
+        $("#forecast-day-4").append(forecastIconEl);
+        $("#forecast-day-4").append("<p>" + "Temp: " + forecastTempC.toFixed(2) + " °F");
+        $("#forecast-day-4").append("<p>" + "Humidity: " + forecastHum + "%");
+
+        // VARIABLES AND APPENDS FOR 5/5 DAY FORECAST
+        var rawDate = JSON.stringify(response.list[5].dt_txt);
+        var splitForecastDate = rawDate.split(" ");
+        var forecastDate = moment(splitForecastDate[0]).format("MM/DD/YYYY");
+
+        var forecastWeatherIcon = response.list[5].weather[0].icon;
+        var forecastIconURL = "http://openweathermap.org/img/w/" + forecastWeatherIcon + ".png";
+        forecastIconEl = $("<img>").attr("src", forecastIconURL);
+
+        var forecastTempK = response.list[5].main.temp;
+        var forecastTempC = (forecastTempK - 273.15)*1.80+32;
+        var forecastHum = response.list[5].main.humidity;
+
+        $("#forecast-day-5").append(forecastDate);
+        $("#forecast-day-5").append(forecastIconEl);
+        $("#forecast-day-5").append("<p>" + "Temp: " + forecastTempC.toFixed(2) + " °F");
+        $("#forecast-day-5").append("<p>" + "Humidity: " + forecastHum + "%");
 
     })
 }
@@ -101,6 +168,13 @@ $("#select-city").on("click", function(event) {
     event.preventDefault();
 
     var inputCity = $("#city-input").val().trim();
+    // localStorage.setItem("LastSearch", LastSearch);
+
+    //       function displayLastSearch(){
+    //           var displaySearch = localStorage.getItem("LastSearch");
+    //           $("#userInput").val(displaySearch);
+    //       }
+    //       displayLastSearch();
 
     searchWeather(inputCity);
 });
