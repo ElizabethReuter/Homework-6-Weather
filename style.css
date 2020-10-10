@@ -1,6 +1,64 @@
 .header {
-    background-color: gray;
-    padding: 30px;
-    text-align: center;
+    background-color: rgb(78, 78, 78);
     color: white;
+    text-align: center;
+    font-size: 50px;
+    font-weight: bolder;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+h2 {
+    font-size: 20px;
+}
+
+.column {
+    margin: 25px;
+}
+
+.btn {
+    margin-top: 20px;
+    background-color: blue;
+}
+
+#box {
+    border: solid 2px grey;
+    width: auto;
+    height: auto;
+}
+
+#search {
+    font-size: large;
+    font-weight: bold;
+}
+
+.results-boxes {
+    margin: 15px;
+    padding: 10px;
+}
+
+.forecast {
+    background-color: rgb(13, 13, 253);
+    margin: 5px;
+    padding: 5px;
+    color: white;
+    border-radius: 5px;
+}
+
+.forecast-date {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.forecast-temp {
+    font-size: 15px;
+    margin-bottom: 10px;
+}
+
+.forecast-humidity {
+    font-size: 15px;
+}
+
+.city-name-style {
+    font-size: 40px;
 }
