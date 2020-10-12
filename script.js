@@ -1,9 +1,30 @@
+var historyList = JSON.parse(localStorage.getItem("weather-history"))||[];
+function showHistory(){
+    $("#history").html("")
+    for (var i=0; i<historyList.length; i++){
+        var item=$("<li>")
+        var button=$("<button>").text(historyList[i])
+        button.on("click", function(event){
+            console.log(event.target)
+            var name = event.target.innerText
+            searchWeather(name)
+        })
+        item.append(button)
+        $("#history").append(item)
+    }
+}
+showHistory()
 function searchWeather(name) {
 
     var APIKey = "7ae0d4bfac0084041cd8bf9db1bdec61"; 
     var userInput = $("#city-input").val();
     var queryURL = "https://api.openweathermap.org/data/2.5/weather?q="+ userInput+"&appid=" + APIKey;
-
+console.log(historyList)
+  if (historyList.indexOf(name)===-1){
+      historyList.push(name)
+      localStorage.setItem("weather-history",JSON.stringify(historyList))
+      showHistory()
+  }  
 
     $.ajax({ 
         url: queryURL,
@@ -39,8 +60,6 @@ function searchWeather(name) {
             $("#city-name").append("<p>" + "Wind Speed: " + windSpeed + " MPH");
 
         
-        // Referenced this project to troubleshoot UV index pulling issues: https://github.com/cmelby/WeatherDashboard
-
         lat = response.coord.lat;
         lon = response.coord.lon;
         console.log(lat);
@@ -60,7 +79,6 @@ function searchWeather(name) {
             });
 
     });
-    // START OF THE SECOND QUERY URL USED FOR THE 5 DAY FORECAST
     var queryURLForecast = "https://api.openweathermap.org/data/2.5/forecast?q="+userInput+"&appid=" + APIKey;
 
     $.ajax({
@@ -68,98 +86,29 @@ function searchWeather(name) {
         method: "GET"
     }).then(function(response) {
         console.log(response);
+        for (var day=1;day<6;day++){
 
-        // FIRST VARIABLES AND DATA APPENDING FOR 1/5 DAY FORECAST
-        var rawDate = JSON.stringify(response.list[1].dt_txt);
-        var splitForecastDate = rawDate.split(" ");
-        var forecastDate = moment(splitForecastDate[0]).format("MM/DD/YYYY");
-
-        var forecastWeatherIcon = response.list[1].weather[0].icon;
-        console.log(forecastWeatherIcon);
-        var forecastIconURL = "http://openweathermap.org/img/w/" + forecastWeatherIcon + ".png";
-        console.log(forecastIconURL);
-        forecastIconEl = $("<img>").attr("src", forecastIconURL);
-
-        var forecastTempK = response.list[1].main.temp;
-        var forecastTempC = (forecastTempK - 273.15)*1.80+32;
-        var forecastHum = response.list[1].main.humidity;
-
-        $("#forecast-day-1").append(forecastDate);
-        $("#forecast-day-1").append(forecastIconEl);
-        $("#forecast-day-1").append("<p>" + "Temp: " + forecastTempC.toFixed(2) + " °F");
-        $("#forecast-day-1").append("<p>" + "Humidity: " + forecastHum + "%");
-
-        // VARIABLES AND APPENDS FOR 2/5 DAY FORECAST
-        var rawDate = JSON.stringify(response.list[2].dt_txt);
-        var splitForecastDate = rawDate.split(" ");
-        var forecastDate = moment(splitForecastDate[0]).format("MM/DD/YYYY");
-
-        var forecastWeatherIcon = response.list[2].weather[0].icon;
-        var forecastIconURL = "http://openweathermap.org/img/w/" + forecastWeatherIcon + ".png";
-        forecastIconEl = $("<img>").attr("src", forecastIconURL);
-
-        var forecastTempK = response.list[2].main.temp;
-        var forecastTempC = (forecastTempK - 273.15)*1.80+32;
-        var forecastHum = response.list[2].main.humidity;
-
-        $("#forecast-day-2").append(forecastDate);
-        $("#forecast-day-2").append(forecastIconEl);
-        $("#forecast-day-2").append("<p>" + "Temp: " + forecastTempC.toFixed(2) + " °F");
-        $("#forecast-day-2").append("<p>" + "Humidity: " + forecastHum + "%");
-
-        // VARIABLES AND APPENDS FOR 3/5 DAY FORECAST
-        var rawDate = JSON.stringify(response.list[3].dt_txt);
-        var splitForecastDate = rawDate.split(" ");
-        var forecastDate = moment(splitForecastDate[0]).format("MM/DD/YYYY");
-
-        var forecastWeatherIcon = response.list[3].weather[0].icon;
-        var forecastIconURL = "http://openweathermap.org/img/w/" + forecastWeatherIcon + ".png";
-        forecastIconEl = $("<img>").attr("src", forecastIconURL);
-
-        var forecastTempK = response.list[3].main.temp;
-        var forecastTempC = (forecastTempK - 273.15)*1.80+32;
-        var forecastHum = response.list[3].main.humidity;
-
-        $("#forecast-day-3").append(forecastDate);
-        $("#forecast-day-3").append(forecastIconEl);
-        $("#forecast-day-3").append("<p>" + "Temp: " + forecastTempC.toFixed(2) + " °F");
-        $("#forecast-day-3").append("<p>" + "Humidity: " + forecastHum + "%");
-
-        // VARIABLES AND APPENDS FOR 4/5 DAY FORECAST
-        var rawDate = JSON.stringify(response.list[4].dt_txt);
-        var splitForecastDate = rawDate.split(" ");
-        var forecastDate = moment(splitForecastDate[0]).format("MM/DD/YYYY");
-
-        var forecastWeatherIcon = response.list[4].weather[0].icon;
-        var forecastIconURL = "http://openweathermap.org/img/w/" + forecastWeatherIcon + ".png";
-        forecastIconEl = $("<img>").attr("src", forecastIconURL);
-
-        var forecastTempK = response.list[4].main.temp;
-        var forecastTempC = (forecastTempK - 273.15)*1.80+32;
-        var forecastHum = response.list[4].main.humidity;
-
-        $("#forecast-day-4").append(forecastDate);
-        $("#forecast-day-4").append(forecastIconEl);
-        $("#forecast-day-4").append("<p>" + "Temp: " + forecastTempC.toFixed(2) + " °F");
-        $("#forecast-day-4").append("<p>" + "Humidity: " + forecastHum + "%");
-
-        // VARIABLES AND APPENDS FOR 5/5 DAY FORECAST
-        var rawDate = JSON.stringify(response.list[5].dt_txt);
-        var splitForecastDate = rawDate.split(" ");
-        var forecastDate = moment(splitForecastDate[0]).format("MM/DD/YYYY");
-
-        var forecastWeatherIcon = response.list[5].weather[0].icon;
-        var forecastIconURL = "http://openweathermap.org/img/w/" + forecastWeatherIcon + ".png";
-        forecastIconEl = $("<img>").attr("src", forecastIconURL);
-
-        var forecastTempK = response.list[5].main.temp;
-        var forecastTempC = (forecastTempK - 273.15)*1.80+32;
-        var forecastHum = response.list[5].main.humidity;
-
-        $("#forecast-day-5").append(forecastDate);
-        $("#forecast-day-5").append(forecastIconEl);
-        $("#forecast-day-5").append("<p>" + "Temp: " + forecastTempC.toFixed(2) + " °F");
-        $("#forecast-day-5").append("<p>" + "Humidity: " + forecastHum + "%");
+            var data=response.list[day]
+    
+            var rawDate = JSON.stringify(data.dt_txt);
+            var splitForecastDate = rawDate.split(" ");
+            var forecastDate = moment(splitForecastDate[0]).format("MM/DD/YYYY");
+    
+            var forecastWeatherIcon = data.weather[0].icon;
+            console.log(forecastWeatherIcon);
+            var forecastIconURL = "http://openweathermap.org/img/w/" + forecastWeatherIcon + ".png";
+            console.log(forecastIconURL);
+            forecastIconEl = $("<img>").attr("src", forecastIconURL);
+    
+            var forecastTempK = data.main.temp;
+            var forecastTempC = (forecastTempK - 273.15)*1.80+32;
+            var forecastHum = data.main.humidity;
+    
+            $("#forecast-day-"+day).append(forecastDate);
+            $("#forecast-day-"+day).append(forecastIconEl);
+            $("#forecast-day-"+day).append("<p>" + "Temp: " + forecastTempC.toFixed(2) + " °F");
+            $("#forecast-day-"+day).append("<p>" + "Humidity: " + forecastHum + "%");
+        }
 
     })
 }
@@ -168,13 +117,6 @@ $("#select-city").on("click", function(event) {
     event.preventDefault();
 
     var inputCity = $("#city-input").val().trim();
-    // localStorage.setItem("LastSearch", LastSearch);
-
-    //       function displayLastSearch(){
-    //           var displaySearch = localStorage.getItem("LastSearch");
-    //           $("#userInput").val(displaySearch);
-    //       }
-    //       displayLastSearch();
 
     searchWeather(inputCity);
 });
