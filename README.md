@@ -1,6 +1,6 @@
 # Homework-6-Weather
 
-Referenced - https://github.com/cmelby/WeatherDashboard/blob/master/script.js
+https://elizabethreuter.github.io/Homework-6-Weather/
 
 # 06 Server-Side APIs: Weather Dashboard
 
@@ -48,3 +48,6 @@ You are required to submit the following for review:
 
 - - -
 © 2019 Trilogy Education Services, a 2U, Inc. brand. All Rights Reserved.
+
+- - - - - - - - - - - - - - - - - - - - - - 
+Referenced - https://github.com/cmelby/WeatherDashboard/blob/master/script.js
